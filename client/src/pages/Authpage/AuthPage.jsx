@@ -1,10 +1,13 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import {BrowserRouter, Switch, Route, Link} from 'react-router-dom'
 import axios from 'axios'
 import './AuthPage.scss'
+import {AuthContext} from '../../context/AuthContext'
 
 const AuthPage = () => {
   const [form, setForm] = useState({email:'', password: ''})
+
+  const {login} = useContext(AuthContext)
 
   const changeHandler = (event) => {
     setForm({...form, [event.target.name]: event.target.value})
@@ -24,6 +27,24 @@ const registerHandler = async () => {
     console.log(error)
   }
 }
+
+const loginHandler = async () => {
+  try {
+    await axios
+      .post(
+        "/api/auth/login",
+        { ...form },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => login(response.data.token, response.data.userId));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   return (
     <BrowserRouter>
@@ -59,7 +80,7 @@ const registerHandler = async () => {
                   </div>
                   <div className="row">
                     <button
-                      onClick={registerHandler}
+                      onClick={loginHandler}
                       className="waves-effect waves-light btn red lighten-1"
                     >
                       Войти
