@@ -22,4 +22,14 @@ router.post('/add', async (req, res) => {
   }
 })
 
+router.get('/', async (req, res) => {
+  try {
+    const { userId } = req.query
+    const todo = await Todo.find({owner: userId})
+    res.json(todo)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 module.exports = router
