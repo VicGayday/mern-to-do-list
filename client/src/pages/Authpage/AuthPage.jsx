@@ -1,10 +1,13 @@
 import React, {useState, useContext} from 'react'
-import {BrowserRouter, Switch, Route, Link} from 'react-router-dom'
+import {BrowserRouter, Switch, Route, Link, useHistory} from 'react-router-dom'
 import axios from 'axios'
 import './AuthPage.scss'
 import {AuthContext} from '../../context/AuthContext'
 
 const AuthPage = () => {
+
+  const history = useHistory()
+
   const [form, setForm] = useState({email:'', password: ''})
 
   const {login} = useContext(AuthContext)
@@ -21,7 +24,7 @@ const registerHandler = async () => {
         'Content-Type': 'application/json'
       }
     })
-    .then(response => console.log(response))
+    history.push('/')
   }
   catch (error) {
     console.log(error)

@@ -32,4 +32,35 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.delete('/delete/:id', async (req, res) => {
+  try {
+    const todo = await Todo.findOneAndDelete({_id: req.params.id})
+    res.json(todo)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+router.put('/completed/:id', async (req, res) => {
+  try {
+    const todo = await Todo.findOne({ _id: req.params.id });
+    todo.completed = !todo.completed;
+    await todo.save();
+    res.json(todo);
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+router.put("/important/:id", async (req, res) => {
+  try {
+    const todo = await Todo.findOne({ _id: req.params.id });
+    todo.important = !todo.important;
+    await todo.save();
+    res.json(todo);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = router
